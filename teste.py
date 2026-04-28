@@ -7,4 +7,8 @@ st.image("https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=20250108142
 
 st.video("https://www.youtube.com/watch?v=uUTraxYVf8o")
 
-st.image('https://github.com/sofiacmbastos-alt/projeto1/blob/main/IMG_4942.jpeg', caption="Remote Image")
+nome = st.text_input('Digite o seu nome')
+if nome:
+    st.write(nome, 'é um cara legal')
+
+st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Netherlandwarf.jpg/330px-Netherlandwarf.jpg")
