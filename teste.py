@@ -2,3 +2,5 @@ import streamlit as st
 
 st.title('Teste ECMI 2')
 st.write("Tabela")
+
+st.image("https://www.google.com/search?q=white+hamster+meme&sca_esv=06de5ba07996f893&udm=2&biw=1920&bih=945&sxsrf=ANbL-n5XoUquJj0NjqXQA4xKJFEyYgb2vg%3A1777399782814&ei=5vfwadevMay_1sQPw629sAU&oq=white+hamster&gs_lp=Egtnd3Mtd2l6LWltZyINd2hpdGUgaGFtc3RlcioCCAAyBRAAGIAEMgUQABiABDIEEAAYHjIEEAAYHjIEEAAYHjIEEAAYHjIEEAAYHjIEEAAYHjIEEAAYHjIEEAAYHkjtJ1C9EFicHnADeACQAQCYAccBoAGjC6oBAzcuNrgBAcgBAPgBAZgCEKAC-wvCAgoQABiABBiKBRhDwgIGEAAYBxgewgIIEAAYBxgeGArCAgcQIxjJAhgnwgILEAAYgAQYsQMYgwHCAggQABiABBixA8ICBxAAGIAEGAqYAwCIBgGSBwU4LjcuMaAHyT6yBwU1LjcuMbgH7gvCBwgwLjIuMTIuMsgHSIAIAQ&sclient=gws-wiz-img#sv=CAMSVhoyKhBlLWtiM0xNLUwxVGVqMGtNMg5rYjNMTS1MMVRlajBrTToOd05IOGZBX1cxRXptTk0gBCocCgZtb3NhaWMSEGUta2IzTE0tTDFUZWowa00YADABGAcgwJf9-wpKCBABGAEgASgB", caption="Remote Image")
