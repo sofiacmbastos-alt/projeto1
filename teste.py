@@ -5,4 +5,4 @@ st.write("Tabela")
 
 st.image("https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=202501081421", caption="Remote Image")
 
-st.image("https://www.youtube.com/watch?v=uUTraxYVf8o")
+st.video("https://www.youtube.com/watch?v=uUTraxYVf8o")
