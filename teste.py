@@ -9,6 +9,6 @@ st.video("https://www.youtube.com/watch?v=uUTraxYVf8o")
 
 nome = st.text_input('type your name here')
 if nome:
-    st.write(nome, 'is super cuteee *-*')
+    st.write(nome, 'is super cuteee')
 
 st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Netherlandwarf.jpg/330px-Netherlandwarf.jpg")
