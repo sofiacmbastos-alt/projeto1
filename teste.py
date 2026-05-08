@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.markdown(
-    "<h1 style='color:#FFD1DC;'>Teste ECMI 2 🌸</h1>",
+    "<h1 style='color:#FFD1DC;'>Sofia's Reminders 🌸</h1>",
     unsafe_allow_html=True
 )
 
