@@ -25,3 +25,8 @@ if nome:
 st.image(
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Netherlandwarf.jpg/330px-Netherlandwarf.jpg"
 )
+
+tasks = ["remedio 1", "remedio 2", "academia"]
+
+for task in tasks:
+    st.checkbox(task)
