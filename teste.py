@@ -5,11 +5,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.write("Tabela")
+st.write("things i need to do/be reminded of")
 
 st.image(
-    "https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=202501081421",
-    caption="Remote Image"
+    "https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=202501081421"
 )
 
 st.video("https://www.youtube.com/watch?v=uUTraxYVf8o")
