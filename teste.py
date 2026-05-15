@@ -43,8 +43,13 @@ total = len(tasks)
 st.progress(done / total)
 st.write(f"{done}/{total} completed 🌸")
 
-st.subheader("Histórico")
+st.subheader("Histórico 🌸")
 
 for dia, tarefas in historico.items():
-    st.write(f"📅 {dia}")
-    st.write(tarefas)
+    st.markdown(f"### 📅 {dia}")
+
+    for tarefa, feito in tarefas.items():
+        if feito:
+            st.write(f"✅ {tarefa}")
+        else:
+            st.write(f"⬜ {tarefa}")
