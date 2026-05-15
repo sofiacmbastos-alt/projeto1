@@ -3,7 +3,7 @@ from datetime import date
 from supabase import create_client, Client
 
 SUPABASE_URL = "https://madsldtymrcyevpmwwup.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hZHNsZHR5bXJjeWV2cG13d3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNDcwMjMsImV4cCI6MjA5MzgyMzAyM30.qArWVNfbAJ-Xs4Osnpj2SEK1EvbW_awapIVzhH6xGNU"
+SUPABASE_KEY = "YOUR_ANON_KEY_HERE"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -21,21 +21,27 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
 
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif !important;
         color: #b76b86;
     }
 
-    /* BIG TITLE */
     h1 {
         font-family: 'Monsieur La Doulaise', cursive !important;
-        font-size: 110px !important;
+        font-size: 140px !important;
         text-align: center;
         color: #d48ca3 !important;
+        margin-top: 10px;
         margin-bottom: 0px;
+        line-height: 1.1 !important;
+        letter-spacing: 1px;
     }
 
-    /* HEADINGS */
     h2, h3 {
         font-family: 'Inter', sans-serif !important;
         color: #c77c95 !important;
@@ -47,13 +53,11 @@ st.markdown(
         font-size: 16px !important;
     }
 
-    /* INPUT */
     input {
         border-radius: 12px !important;
         font-size: 16px !important;
     }
 
-    /* BUTTON */
     button {
         background-color: #f7a8c4 !important;
         color: white !important;
@@ -66,7 +70,6 @@ st.markdown(
         background-color: #f28fb6 !important;
     }
 
-    /* CHECKBOX */
     [data-testid="stCheckbox"] label {
         font-size: 18px !important;
         color: #b76b86 !important;
@@ -76,7 +79,6 @@ st.markdown(
         accent-color: #f7a8c4 !important;
     }
 
-    /* CARD */
     .card {
         background: white;
         padding: 14px;
@@ -85,7 +87,6 @@ st.markdown(
         border: 1px solid #ffe4ec;
         box-shadow: 0px 2px 10px rgba(0,0,0,0.04);
     }
-
     </style>
     """,
     unsafe_allow_html=True
