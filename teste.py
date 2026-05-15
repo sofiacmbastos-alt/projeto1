@@ -21,76 +21,30 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
 
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
+    /* FORCE BIG HERO TITLE */
+    .big-title {
+        font-family: 'Monsieur La Doulaise', cursive;
+        font-size: 160px;
+        text-align: center;
+        color: #d48ca3;
+        line-height: 1;
+        margin-top: 10px;
+        margin-bottom: 20px;
     }
 
+    /* make everything else consistent */
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif !important;
-        color: #b76b86;
-    }
-
-    h1 {
-        font-family: 'Monsieur La Doulaise', cursive !important;
-        font-size: 140px !important;
-        text-align: center;
-        color: #d48ca3 !important;
-        margin-top: 10px;
-        margin-bottom: 0px;
-        line-height: 1.1 !important;
-        letter-spacing: 1px;
-    }
-
-    h2, h3 {
-        font-family: 'Inter', sans-serif !important;
-        color: #c77c95 !important;
-        font-weight: 600;
-    }
-
-    p, label, span {
-        color: #b76b86 !important;
-        font-size: 16px !important;
-    }
-
-    input {
-        border-radius: 12px !important;
-        font-size: 16px !important;
-    }
-
-    button {
-        background-color: #f7a8c4 !important;
-        color: white !important;
-        border-radius: 12px !important;
-        border: none !important;
-        padding: 0.5rem 1rem !important;
-    }
-
-    button:hover {
-        background-color: #f28fb6 !important;
-    }
-
-    [data-testid="stCheckbox"] label {
         font-size: 18px !important;
         color: #b76b86 !important;
     }
 
-    * {
-        accent-color: #f7a8c4 !important;
-    }
-
-    .card {
-        background: white;
-        padding: 14px;
-        border-radius: 16px;
-        margin-bottom: 10px;
-        border: 1px solid #ffe4ec;
-        box-shadow: 0px 2px 10px rgba(0,0,0,0.04);
-    }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+st.markdown("<div class='big-title'>Sofia's Reminders</div>", unsafe_allow_html=True)
 
 st.markdown("<h1>Sofia's Reminders</h1>", unsafe_allow_html=True)
 
