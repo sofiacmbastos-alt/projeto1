@@ -3,7 +3,7 @@ from datetime import date
 from supabase import create_client, Client
 
 SUPABASE_URL = "https://madsldtymrcyevpmwwup.supabase.co"
-SUPABASE_KEY = "YOUR_ANON_KEY_HERE"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hZHNsZHR5bXJjeWV2cG13d3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNDcwMjMsImV4cCI6MjA5MzgyMzAyM30.qArWVNfbAJ-Xs4Osnpj2SEK1EvbW_awapIVzhH6xGNU"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
