@@ -1,15 +1,16 @@
 import streamlit as st
 from datetime import date, timedelta
 from supabase import create_client, Client
+import calendar
 
 SUPABASE_URL = "https://madsldtymrcyevpmwwup.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hZHNsZHR5bXJjeWV2cG13d3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNDcwMjMsImV4cCI6MjA5MzgyMzAyM30.qArWVNfbAJ-Xs4Osnpj2SEK1EvbW_awapIVzhH6xGNU"
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 today = date.today()
 
-st.set_page_config(page_title="Pink Habit Tracker", layout="wide")
+st.set_page_config(page_title="Habit", layout="centered")
 
 # ---------------- STYLE ----------------
 st.markdown(
@@ -18,82 +19,51 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
     .stApp {
-        background-color: #FFF7FA;
+        background: #ffeef5;
         font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* phone frame */
+    .phone {
+        width: 390px;
+        background: #fff7fa;
+        border-radius: 40px;
+        padding: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        margin-top: 20px;
     }
 
     .title {
-        font-size: 90px;
         text-align: center;
-        color: #d48ca3;
-        font-family: 'Inter', sans-serif;
+        font-size: 28px;
         font-weight: 600;
-        margin-bottom: 20px;
+        color: #d48ca3;
+        margin-bottom: 10px;
     }
 
-    /* iPhone toggle */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 52px;
-      height: 30px;
-    }
-
-    .switch input { display: none; }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #f3c6d3;
-      transition: .4s;
-      border-radius: 30px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: #d48ca3;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
-
-    /* card */
     .card {
         background: white;
+        border-radius: 18px;
         padding: 12px;
-        border-radius: 14px;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         border: 1px solid #ffe4ec;
     }
 
-    /* badge */
     .badge {
-        padding: 8px 14px;
+        text-align: center;
+        padding: 6px 12px;
         border-radius: 20px;
+        background: #ffd6e7;
+        color: #a85b7a;
+        font-size: 13px;
         display: inline-block;
         margin-bottom: 10px;
-        font-weight: 500;
     }
 
-    .pink { background: #ffd6e7; color: #a85b7a; }
-    .silver { background: #f0f0f0; color: #777; }
-    .gold { background: #ffe6a7; color: #8a6b00; }
-
     /* calendar */
-    .cal {
+    .calendar {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         gap: 5px;
@@ -101,12 +71,12 @@ st.markdown(
     }
 
     .day {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
         text-align: center;
+        padding: 10px;
+        border-radius: 10px;
         font-size: 12px;
         background: #ffe4ec;
+        color: #b76b86;
     }
 
     .done {
@@ -119,9 +89,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("<div class='title'>Sofia’s Habit Tracker</div>", unsafe_allow_html=True)
+# ---------------- PHONE WRAPPER ----------------
+st.markdown("<div class='phone'>", unsafe_allow_html=True)
 
-# ---------------- HABITS ----------------
+st.markdown("<div class='title'>Sofia</div>", unsafe_allow_html=True)
+
+# ---------------- DATA ----------------
 habits = ["Remedio 1", "Remedio 2", "Academia"]
 
 data = supabase.table("tasks").select("*").execute().data or []
@@ -131,11 +104,11 @@ today_str = str(today)
 today_data = [d for d in data if d["day"] == today_str]
 
 # ---------------- STREAK ----------------
-def get_streak():
+def streak_calc():
     streak = 0
     current = today
 
-    for i in range(30):
+    for i in range(60):
         day = str(current - timedelta(days=i))
         day_tasks = [d for d in data if d["day"] == day]
 
@@ -149,69 +122,63 @@ def get_streak():
 
     return streak
 
-streak = get_streak()
+streak = streak_calc()
 
-# ---------------- BADGES ----------------
-if streak >= 30:
-    badge = "gold"
-elif streak >= 7:
-    badge = "silver"
-else:
-    badge = "pink"
+st.markdown(f"<div class='badge'>Streak: {streak} days</div>", unsafe_allow_html=True)
 
-st.markdown(f"<div class='badge {badge}'>Streak: {streak} days</div>", unsafe_allow_html=True)
-
-# ---------------- TOGGLES ----------------
+# ---------------- HABITS ----------------
 st.subheader("Today")
 
-done_count = 0
+done = 0
 
-for habit in habits:
-    record = next((t for t in today_data if t["task"] == habit), None)
+for h in habits:
+    record = next((x for x in today_data if x["task"] == h), None)
     value = record["done"] if record else False
 
-    col1, col2 = st.columns([1, 8])
-
-    with col1:
-        checked = st.checkbox("", value=value, key=habit)
-
-    with col2:
-        st.write(habit)
+    checked = st.checkbox(h, value=value, key=h)
 
     if record:
         if checked != record["done"]:
-            supabase.table("tasks").update({
-                "done": checked
-            }).eq("id", record["id"]).execute()
+            supabase.table("tasks").update({"done": checked}).eq("id", record["id"]).execute()
     else:
         if checked:
             supabase.table("tasks").insert({
-                "task": habit,
+                "task": h,
                 "done": True,
                 "day": today_str
             }).execute()
 
     if checked:
-        done_count += 1
+        done += 1
 
-st.progress(done_count / len(habits))
+st.progress(done / len(habits))
 
-# ---------------- CALENDAR HEATMAP ----------------
+# ---------------- MONTH CALENDAR ----------------
 st.subheader("Calendar")
 
-last_days = [today - timedelta(days=i) for i in range(21)][::-1]
+year = today.year
+month = today.month
 
-cal_html = "<div class='cal'>"
+cal = calendar.Calendar(firstweekday=0)
+month_days = cal.itermonthdates(year, month)
 
-for d in last_days:
+html = "<div class='calendar'>"
+
+for d in month_days:
+    if d.month != month:
+        html += "<div></div>"
+        continue
+
     d_str = str(d)
-    day_tasks = [x for x in data if x["day"] == d_str]
+    day_data = [x for x in data if x["day"] == d_str]
 
-    if day_tasks and all(x["done"] for x in day_tasks):
-        cal_html += f"<div class='day done'>{d.day}</div>"
+    if day_data and all(x["done"] for x in day_data):
+        html += f"<div class='day done'>{d.day}</div>"
     else:
-        cal_html += f"<div class='day'>{d.day}</div>"
+        html += f"<div class='day'>{d.day}</div>"
 
-cal_html += "</div>"
+html += "</div>"
 
-st.markdown(cal_html, unsafe_allow_html=True)
+st.markdown(html, unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
