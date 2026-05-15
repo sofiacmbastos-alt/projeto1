@@ -4,6 +4,17 @@ import json
 import os
 
 st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #FFDDEB;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
     "<h1 style='color:#FFD1DC;'>Sofia's Reminders 🌸</h1>",
     unsafe_allow_html=True
 )
