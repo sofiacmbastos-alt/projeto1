@@ -101,4 +101,3 @@ for item in reversed(tasks_data):
         """,
         unsafe_allow_html=True
     )
-    )
