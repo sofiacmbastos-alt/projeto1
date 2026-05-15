@@ -9,6 +9,8 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 today = str(date.today())
 
+st.set_page_config(page_title="Reminders", layout="wide")
+
 st.markdown(
     """
     <style>
@@ -19,14 +21,54 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
 
-    h1 {
-        font-family: 'Monsieur La Doulaise', cursive;
-        font-size: 75px;
-        text-align: center;
-        color: #d48ca3;
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif !important;
+        color: #b76b86;
     }
 
-    h2, h3, p, label {
+    /* BIG TITLE */
+    h1 {
+        font-family: 'Monsieur La Doulaise', cursive !important;
+        font-size: 110px !important;
+        text-align: center;
+        color: #d48ca3 !important;
+        margin-bottom: 0px;
+    }
+
+    /* HEADINGS */
+    h2, h3 {
+        font-family: 'Inter', sans-serif !important;
+        color: #c77c95 !important;
+        font-weight: 600;
+    }
+
+    p, label, span {
+        color: #b76b86 !important;
+        font-size: 16px !important;
+    }
+
+    /* INPUT */
+    input {
+        border-radius: 12px !important;
+        font-size: 16px !important;
+    }
+
+    /* BUTTON */
+    button {
+        background-color: #f7a8c4 !important;
+        color: white !important;
+        border-radius: 12px !important;
+        border: none !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    button:hover {
+        background-color: #f28fb6 !important;
+    }
+
+    /* CHECKBOX */
+    [data-testid="stCheckbox"] label {
+        font-size: 18px !important;
         color: #b76b86 !important;
     }
 
@@ -34,6 +76,7 @@ st.markdown(
         accent-color: #f7a8c4 !important;
     }
 
+    /* CARD */
     .card {
         background: white;
         padding: 14px;
@@ -52,7 +95,7 @@ st.markdown("<h1>Sofia's Reminders</h1>", unsafe_allow_html=True)
 
 st.subheader("Add task")
 
-new_task = st.text_input(" ")
+new_task = st.text_input("")
 
 if st.button("Add") and new_task:
     supabase.table("tasks").insert({
