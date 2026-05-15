@@ -1,9 +1,16 @@
 import streamlit as st
 from datetime import date
-import json
-import os
+from supabase import create_client, Client
 
-# ----------------- STYLE -----------------
+# ---------------- SUPABASE SETUP ----------------
+SUPABASE_URL = "https://madsldtymrcyevpmwwup.supabase.co"
+SUPABASE_KEY = "sb_publishable_TZvbGUtBqfmIQIWB_XMWhQ_-y6Bd1un"
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+today = str(date.today())
+
+# ---------------- STYLE ----------------
 st.markdown(
     """
     <style>
@@ -13,58 +20,14 @@ st.markdown(
         background-color: #FFF7FA;
     }
 
-    /* REMOVE STREAMLIT BLUE ACCENTS */
-    * {
-        accent-color: #f7a8c4 !important;
-    }
-
-    /* TITLE FONT */
-    h1, h2, h3 {
-        font-family: 'Monsieur La Doulaise', cursive !important;
+    h1, h2 {
+        font-family: 'Monsieur La Doulaise', cursive;
         color: #d48ca3 !important;
         text-align: center;
     }
 
-    /* TEXT */
-    p, span, label {
-        color: #c77c95 !important;
-    }
-
-    /* CHECKBOX */
-    [data-testid="stCheckbox"] label {
-        color: #c77c95 !important;
-        font-size: 16px;
-    }
-
-    /* BUTTONS (fix blue Streamlit buttons) */
-    button {
-        background-color: #f7a8c4 !important;
-        color: white !important;
-        border-radius: 12px !important;
-        border: none !important;
-    }
-
-    button:hover {
-        background-color: #f28fb6 !important;
-    }
-
-    /* PROGRESS BAR */
-    [data-testid="stProgress"] > div > div {
-        background-color: #ffe4ec !important;
-    }
-
-    [data-testid="stProgress"] > div > div > div {
-        background-color: #f7a8c4 !important;
-    }
-
-    /* CARD */
-    .card {
-        background: white;
-        padding: 12px 18px;
-        border-radius: 16px;
-        margin-bottom: 10px;
-        border: 1px solid #ffe4ec;
-        box-shadow: 0px 2px 8px rgba(0,0,0,0.04);
+    * {
+        accent-color: #f7a8c4 !important;
     }
 
     </style>
@@ -72,82 +35,65 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ----------------- TITLE -----------------
 st.markdown("<h1>Sofia's Reminders 🌸</h1>", unsafe_allow_html=True)
 
-st.write("things i need to do/be reminded of")
-
-st.image("https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=202501081421")
-st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Netherlandwarf.jpg/330px-Netherlandwarf.jpg")
-
-# ----------------- DATA -----------------
-tasks = ["remedio 1", "remedio 2", "academia"]
-today = str(date.today())
-
-ARQUIVO = "historico.json"
-
-if os.path.exists(ARQUIVO):
-    with open(ARQUIVO, "r") as f:
-        historico = json.load(f)
-else:
-    historico = {}
-
-if today not in historico:
-    historico[today] = {}
-
-# ensure keys exist
-for t in tasks:
-    if t not in historico[today]:
-        historico[today][t] = False
-
-# ----------------- ADD NEW TASK -----------------
+# ---------------- ADD TASK ----------------
 st.subheader("Add new task ✨")
 
 new_task = st.text_input("New task")
 
-if st.button("Add 💖"):
-    if new_task:
-        historico[today][new_task] = False
-        st.rerun()
+if st.button("Add 💖") and new_task:
+    supabase.table("tasks").insert({
+        "task": new_task,
+        "done": False,
+        "day": today
+    }).execute()
 
-# update task list dynamically
-tasks = list(historico[today].keys())
+# ---------------- LOAD TASKS ----------------
+response = supabase.table("tasks").select("*").eq("day", today).execute()
+tasks_data = response.data
 
-# ----------------- TODAY TASKS -----------------
+# ---------------- DISPLAY TASKS ----------------
 st.subheader("Today 🌸")
 
-for task in tasks:
-    historico[today][task] = st.checkbox(
-        task,
-        value=historico[today][task]
-    )
+done_count = 0
 
-# save
-with open(ARQUIVO, "w") as f:
-    json.dump(historico, f)
+for item in tasks_data:
+    checked = st.checkbox(item["task"], value=item["done"], key=item["id"])
 
-# ----------------- PROGRESS -----------------
-done = sum(historico[today].values())
-total = len(tasks)
+    if checked != item["done"]:
+        supabase.table("tasks").update({
+            "done": checked
+        }).eq("id", item["id"]).execute()
 
-st.progress(done / total if total > 0 else 0)
-st.write(f"{done}/{total} completed 🌸")
+    if checked:
+        done_count += 1
 
-# ----------------- CALENDAR VIEW -----------------
+# ---------------- PROGRESS ----------------
+total = len(tasks_data)
+
+st.progress(done_count / total if total > 0 else 0)
+st.write(f"{done_count}/{total} completed 🌸")
+
+# ---------------- HISTORY ----------------
 st.subheader("Calendar view 📅")
 
-for dia in sorted(historico.keys(), reverse=True):
-    with st.expander(f"📅 {dia}"):
+all_data = supabase.table("tasks").select("*").order("day", desc=True).execute().data
 
-        for tarefa, feito in historico[dia].items():
-            status = "💖 done" if feito else "🤍 not done"
+for item in all_data:
+    status = "💖 done" if item["done"] else "🤍 not done"
 
-            st.markdown(
-                f"""
-                <div class="card">
-                    <b>{tarefa}</b><br>
-                    {status}
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+    st.markdown(
+        f"""
+        <div style="
+            background:white;
+            padding:12px;
+            border-radius:14px;
+            margin-bottom:8px;
+            border:1px solid #ffe4ec;">
+            <b>{item['day']}</b><br>
+            {item['task']} — {status}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
