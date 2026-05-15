@@ -12,11 +12,11 @@ today = date.today()
 
 st.set_page_config(page_title="Habit", layout="centered")
 
-# ---------------- STYLE ----------------
+# ---------------- STYLE FIX ----------------
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&family=Inter:wght@300;400;500&display=swap');
 
     .stApp {
         background: #ffeef5;
@@ -25,7 +25,7 @@ st.markdown(
         justify-content: center;
     }
 
-    /* phone frame */
+    /* PHONE FRAME */
     .phone {
         width: 390px;
         background: #fff7fa;
@@ -35,14 +35,29 @@ st.markdown(
         margin-top: 20px;
     }
 
+    /* BIG PINK TITLE (RESTORED FONT) */
     .title {
+        font-family: 'Monsieur La Doulaise', cursive;
+        font-size: 90px;
         text-align: center;
-        font-size: 28px;
-        font-weight: 600;
         color: #d48ca3;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #d48ca3;
+        font-size: 14px;
         margin-bottom: 10px;
     }
 
+    /* TEXT FIX (PREVENT BLACK TEXT) */
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif !important;
+        color: #b76b86 !important;
+    }
+
+    /* CARD */
     .card {
         background: white;
         border-radius: 18px;
@@ -51,6 +66,7 @@ st.markdown(
         border: 1px solid #ffe4ec;
     }
 
+    /* STREAK BADGE */
     .badge {
         text-align: center;
         padding: 6px 12px;
@@ -62,7 +78,7 @@ st.markdown(
         margin-bottom: 10px;
     }
 
-    /* calendar */
+    /* CALENDAR */
     .calendar {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
@@ -84,6 +100,11 @@ st.markdown(
         color: white;
     }
 
+    /* PROGRESS PINK */
+    .stProgress > div > div > div > div {
+        background-color: #f7a8c4 !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -93,6 +114,7 @@ st.markdown(
 st.markdown("<div class='phone'>", unsafe_allow_html=True)
 
 st.markdown("<div class='title'>Sofia</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>habit tracker</div>", unsafe_allow_html=True)
 
 # ---------------- DATA ----------------
 habits = ["Remedio 1", "Remedio 2", "Academia"]
@@ -153,7 +175,7 @@ for h in habits:
 
 st.progress(done / len(habits))
 
-# ---------------- MONTH CALENDAR ----------------
+# ---------------- CALENDAR ----------------
 st.subheader("Calendar")
 
 year = today.year
