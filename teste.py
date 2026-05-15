@@ -3,53 +3,68 @@ from datetime import date
 import json
 import os
 
+# ----------------- STYLE -----------------
 st.markdown(
     """
     <style>
-
     @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap');
 
     .stApp {
         background-color: #FFF7FA;
     }
 
-    h1 {
-        font-family: 'Monsieur La Doulaise', cursive;
-        color: #d48ca3;
-        font-size: 75px;
+    /* REMOVE STREAMLIT BLUE ACCENTS */
+    * {
+        accent-color: #f7a8c4 !important;
+    }
+
+    /* TITLE FONT */
+    h1, h2, h3 {
+        font-family: 'Monsieur La Doulaise', cursive !important;
+        color: #d48ca3 !important;
         text-align: center;
     }
 
-    /* CHECKBOX TEXT */
+    /* TEXT */
+    p, span, label {
+        color: #c77c95 !important;
+    }
+
+    /* CHECKBOX */
     [data-testid="stCheckbox"] label {
-        color: #d48ca3;
-        font-weight: 500;
+        color: #c77c95 !important;
         font-size: 16px;
     }
 
-    /* CHECKBOX COLOR */
-    [data-testid="stCheckbox"] input {
-        accent-color: #f7a8c4;
+    /* BUTTONS (fix blue Streamlit buttons) */
+    button {
+        background-color: #f7a8c4 !important;
+        color: white !important;
+        border-radius: 12px !important;
+        border: none !important;
     }
 
-    /* PROGRESS BAR BACKGROUND */
+    button:hover {
+        background-color: #f28fb6 !important;
+    }
+
+    /* PROGRESS BAR */
     [data-testid="stProgress"] > div > div {
-        background-color: #ffe4ec;
+        background-color: #ffe4ec !important;
     }
 
-    /* PROGRESS BAR FILL */
     [data-testid="stProgress"] > div > div > div {
-        background-color: #f7a8c4;
+        background-color: #f7a8c4 !important;
     }
 
-    /* CARD STYLE */
+    /* CARD */
     .card {
         background: white;
-        padding: 15px 20px;
-        border-radius: 15px;
-        box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+        padding: 12px 18px;
+        border-radius: 16px;
         margin-bottom: 10px;
         border: 1px solid #ffe4ec;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.04);
     }
 
     </style>
@@ -57,6 +72,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ----------------- TITLE -----------------
 st.markdown("<h1>Sofia's Reminders 🌸</h1>", unsafe_allow_html=True)
 
 st.write("things i need to do/be reminded of")
@@ -64,8 +80,8 @@ st.write("things i need to do/be reminded of")
 st.image("https://polipet.fbitsstatic.net/media/hollandpopicon.png?v=202501081421")
 st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Netherlandwarf.jpg/330px-Netherlandwarf.jpg")
 
+# ----------------- DATA -----------------
 tasks = ["remedio 1", "remedio 2", "academia"]
-
 today = str(date.today())
 
 ARQUIVO = "historico.json"
@@ -77,9 +93,28 @@ else:
     historico = {}
 
 if today not in historico:
-    historico[today] = {task: False for task in tasks}
+    historico[today] = {}
 
-st.subheader("Today ✨")
+# ensure keys exist
+for t in tasks:
+    if t not in historico[today]:
+        historico[today][t] = False
+
+# ----------------- ADD NEW TASK -----------------
+st.subheader("Add new task ✨")
+
+new_task = st.text_input("New task")
+
+if st.button("Add 💖"):
+    if new_task:
+        historico[today][new_task] = False
+        st.rerun()
+
+# update task list dynamically
+tasks = list(historico[today].keys())
+
+# ----------------- TODAY TASKS -----------------
+st.subheader("Today 🌸")
 
 for task in tasks:
     historico[today][task] = st.checkbox(
@@ -87,29 +122,32 @@ for task in tasks:
         value=historico[today][task]
     )
 
+# save
 with open(ARQUIVO, "w") as f:
     json.dump(historico, f)
 
+# ----------------- PROGRESS -----------------
 done = sum(historico[today].values())
 total = len(tasks)
 
-st.progress(done / total)
+st.progress(done / total if total > 0 else 0)
 st.write(f"{done}/{total} completed 🌸")
 
-st.subheader("Histórico 🌸")
+# ----------------- CALENDAR VIEW -----------------
+st.subheader("Calendar view 📅")
 
-for dia, tarefas in historico.items():
-    st.markdown(f"### 📅 {dia}")
+for dia in sorted(historico.keys(), reverse=True):
+    with st.expander(f"📅 {dia}"):
 
-    for tarefa, feito in tarefas.items():
-        status = "✅ done" if feito else "⬜ not done"
+        for tarefa, feito in historico[dia].items():
+            status = "💖 done" if feito else "🤍 not done"
 
-        st.markdown(
-            f"""
-            <div class="card">
-                <b>{tarefa}</b><br>
-                <span>{status}</span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+            st.markdown(
+                f"""
+                <div class="card">
+                    <b>{tarefa}</b><br>
+                    {status}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
