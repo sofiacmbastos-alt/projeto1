@@ -1,5 +1,7 @@
 import streamlit as st
 from datetime import date
+import json
+import os
 
 st.markdown(
     "<h1 style='color:#FFD1DC;'>Sofia's Reminders 🌸</h1>",
@@ -15,21 +17,34 @@ tasks = ["remedio 1", "remedio 2", "academia"]
 
 today = str(date.today())
 
-if "last_reset" not in st.session_state or st.session_state.last_reset != today:
-    st.session_state.task_state = {task: False for task in tasks}
-    st.session_state.last_reset = today
+ARQUIVO = "historico.json"
 
-if "task_state" not in st.session_state:
-    st.session_state.task_state = {task: False for task in tasks}
+if os.path.exists(ARQUIVO):
+    with open(ARQUIVO, "r") as f:
+        historico = json.load(f)
+else:
+    historico = {}
+
+if today not in historico:
+    historico[today] = {task: False for task in tasks}
 
 for task in tasks:
-    st.session_state.task_state[task] = st.checkbox(
+    historico[today][task] = st.checkbox(
         task,
-        value=st.session_state.task_state[task]
+        value=historico[today][task]
     )
 
-done = sum(st.session_state.task_state.values())
+with open(ARQUIVO, "w") as f:
+    json.dump(historico, f)
+
+done = sum(historico[today].values())
 total = len(tasks)
 
 st.progress(done / total)
 st.write(f"{done}/{total} completed 🌸")
+
+st.subheader("Histórico")
+
+for dia, tarefas in historico.items():
+    st.write(f"📅 {dia}")
+    st.write(tarefas)
