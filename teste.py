@@ -6,9 +6,24 @@ import os
 st.markdown(
     """
     <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap');
+
     .stApp {
         background-color: #FFF7FA;
     }
+
+    h1 {
+        font-family: 'Monsieur La Doulaise', cursive;
+        color: #d48ca3;
+        font-size: 75px;
+        text-align: center;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
     </style>
     """,
     unsafe_allow_html=True
