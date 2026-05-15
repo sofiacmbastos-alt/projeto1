@@ -20,19 +20,44 @@ st.markdown(
         text-align: center;
     }
 
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    /* CHECKBOX TEXT */
+    [data-testid="stCheckbox"] label {
+        color: #d48ca3;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    /* CHECKBOX COLOR */
+    [data-testid="stCheckbox"] input {
+        accent-color: #f7a8c4;
+    }
+
+    /* PROGRESS BAR BACKGROUND */
+    [data-testid="stProgress"] > div > div {
+        background-color: #ffe4ec;
+    }
+
+    /* PROGRESS BAR FILL */
+    [data-testid="stProgress"] > div > div > div {
+        background-color: #f7a8c4;
+    }
+
+    /* CARD STYLE */
+    .card {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 10px;
+        border: 1px solid #ffe4ec;
+    }
+
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.markdown(
-    "<h1 style='color:#FFD1DC;'>Sofia's Reminders 🌸</h1>",
-    unsafe_allow_html=True
-)
+st.markdown("<h1>Sofia's Reminders 🌸</h1>", unsafe_allow_html=True)
 
 st.write("things i need to do/be reminded of")
 
@@ -53,6 +78,8 @@ else:
 
 if today not in historico:
     historico[today] = {task: False for task in tasks}
+
+st.subheader("Today ✨")
 
 for task in tasks:
     historico[today][task] = st.checkbox(
@@ -75,7 +102,14 @@ for dia, tarefas in historico.items():
     st.markdown(f"### 📅 {dia}")
 
     for tarefa, feito in tarefas.items():
-        if feito:
-            st.write(f"✅ {tarefa}")
-        else:
-            st.write(f"⬜ {tarefa}")
+        status = "✅ done" if feito else "⬜ not done"
+
+        st.markdown(
+            f"""
+            <div class="card">
+                <b>{tarefa}</b><br>
+                <span>{status}</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
