@@ -144,7 +144,7 @@ st.markdown(
 # ---------------- PHONE WRAPPER ----------------
 st.markdown("<div class='phone'>", unsafe_allow_html=True)
 
-st.markdown("<div class='title'>Sofia</div>", unsafe_allow_html=True)
+st.markdown("<div class='title'>Sofia's to do list</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>habit tracker</div>", unsafe_allow_html=True)
 
 # ---------------- DATA ----------------
