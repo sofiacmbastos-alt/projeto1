@@ -12,6 +12,32 @@ today = date.today()
 
 st.set_page_config(page_title="Habit", layout="centered")
 
+st.markdown("""
+<style>
+
+/* REMOVE TOP SPACE */
+.block-container {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* REMOVE STREAMLIT HEADER */
+[data-testid="stHeader"] {
+    display: none;
+}
+
+header {
+    display: none;
+}
+
+/* REMOVE EXTRA GAP */
+.stApp {
+    margin-top: -60px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # ---------------- STYLE FIX ----------------
 st.markdown(
     """
