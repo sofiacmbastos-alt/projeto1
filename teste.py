@@ -214,24 +214,28 @@ month = today.month
 
 month_name = calendar.month_name[month]
 
-# WEEKDAY LABELS
-weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+weekdays = ["M", "T", "W", "T", "F", "S", "S"]
 
 cal = calendar.Calendar(firstweekday=0)
 month_days = list(cal.itermonthdates(year, month))
 
 html = f"""
 <style>
-.calendar-wrapper {{
+
+.calendar-container {{
     margin-top: 10px;
+    background: rgba(255,255,255,0.6);
+    padding: 16px;
+    border-radius: 24px;
+    border: 1px solid #ffe1eb;
 }}
 
-.calendar-title {{
+.calendar-header {{
     text-align: center;
     font-size: 18px;
-    color: #c77995;
-    margin-bottom: 12px;
     font-weight: 600;
+    color: #c77995;
+    margin-bottom: 16px;
 }}
 
 .calendar-grid {{
@@ -243,32 +247,32 @@ html = f"""
 .weekday {{
     text-align: center;
     font-size: 11px;
-    color: #c98aa1;
-    margin-bottom: 4px;
+    color: #d09ab0;
     font-weight: 600;
+    padding-bottom: 4px;
 }}
 
 .day {{
     aspect-ratio: 1 / 1;
-    border-radius: 16px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffe8f0;
+    background: #fff4f8;
     color: #b76b86;
     font-size: 13px;
-    transition: 0.2s;
+    transition: all 0.2s ease;
     border: 1px solid transparent;
-}}
+}
 
 .day:hover {{
-    transform: scale(1.05);
+    transform: scale(1.06);
 }}
 
 .done {{
-    background: linear-gradient(135deg, #f7a8c4, #f3bfd1);
+    background: linear-gradient(135deg, #f7a8c4, #efbfd1);
     color: white;
-    box-shadow: 0 4px 12px rgba(247,168,196,0.35);
+    box-shadow: 0 6px 14px rgba(247,168,196,0.35);
 }}
 
 .today {{
@@ -279,14 +283,47 @@ html = f"""
 .empty {{
     visibility: hidden;
 }}
+
 </style>
 
-<div class="calendar-wrapper">
-<div class="calendar-title">{month_name} {year}</div>
+<div class="calendar-container">
+
+<div class="calendar-header">
+{month_name} {year}
+</div>
 
 <div class="calendar-grid">
 """
 
+# WEEKDAY LABELS
+for w in weekdays:
+    html += f"<div class='weekday'>{w}</div>"
+
+# DAYS
+for d in month_days:
+
+    if d.month != month:
+        html += "<div class='day empty'></div>"
+        continue
+
+    d_str = str(d)
+    day_data = [x for x in data if x["day"] == d_str]
+
+    classes = "day"
+
+    # completed day
+    if day_data and all(x["done"] for x in day_data):
+        classes += " done"
+
+    # today
+    if d == today:
+        classes += " today"
+
+    html += f"<div class='{classes}'>{d.day}</div>"
+
+html += "</div></div>"
+
+st.markdown(html, unsafe_allow_html=True)
 # WEEKDAY ROW
 for w in weekdays:
     html += f"<div class='weekday'>{w}</div>"
