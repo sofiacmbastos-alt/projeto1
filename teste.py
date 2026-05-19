@@ -292,37 +292,6 @@ html = f"""
 <div class="calendar-grid">
 """
 
-# weekdays row
-for w in weekdays:
-    html += f"<div class='weekday'>{w}</div>"
-
-# days
-for d in month_days:
-
-    if d.month != month:
-        html += "<div class='empty'></div>"
-        continue
-
-    d_str = str(d)
-    day_data = [x for x in data if x["day"] == d_str]
-
-    classes = "day"
-
-    if day_data and all(x["done"] for x in day_data):
-        classes += " done"
-
-    if d == today:
-        classes += " today"
-
-    html += f"<div class='{classes}'>{d.day}</div>"
-
-html += "</div></div>"
-
-st.markdown(html, unsafe_allow_html=True)
-# WEEKDAY LABELS
-for w in weekdays:
-    html += f"<div class='weekday'>{w}</div>"
-
 # DAYS
 for d in month_days:
 
