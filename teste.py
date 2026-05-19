@@ -211,7 +211,6 @@ st.subheader("Calendar")
 
 year = today.year
 month = today.month
-
 month_name = calendar.month_name[month]
 
 weekdays = ["M", "T", "W", "T", "F", "S", "S"]
@@ -249,7 +248,6 @@ html = f"""
     font-size: 11px;
     color: #d09ab0;
     font-weight: 600;
-    padding-bottom: 4px;
 }}
 
 .day {{
@@ -261,18 +259,17 @@ html = f"""
     background: #fff4f8;
     color: #b76b86;
     font-size: 13px;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
-}
+    transition: 0.2s;
+}}
 
 .day:hover {{
-    transform: scale(1.06);
+    transform: scale(1.05);
 }}
 
 .done {{
-    background: linear-gradient(135deg, #f7a8c4, #efbfd1);
+    background: linear-gradient(135deg, #f8b6cc, #f3c4ff);
     color: white;
-    box-shadow: 0 6px 14px rgba(247,168,196,0.35);
+    box-shadow: 0 6px 16px rgba(248,182,204,0.35);
 }}
 
 .today {{
@@ -295,6 +292,33 @@ html = f"""
 <div class="calendar-grid">
 """
 
+# weekdays row
+for w in weekdays:
+    html += f"<div class='weekday'>{w}</div>"
+
+# days
+for d in month_days:
+
+    if d.month != month:
+        html += "<div class='empty'></div>"
+        continue
+
+    d_str = str(d)
+    day_data = [x for x in data if x["day"] == d_str]
+
+    classes = "day"
+
+    if day_data and all(x["done"] for x in day_data):
+        classes += " done"
+
+    if d == today:
+        classes += " today"
+
+    html += f"<div class='{classes}'>{d.day}</div>"
+
+html += "</div></div>"
+
+st.markdown(html, unsafe_allow_html=True)
 # WEEKDAY LABELS
 for w in weekdays:
     html += f"<div class='weekday'>{w}</div>"
