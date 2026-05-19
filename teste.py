@@ -181,26 +181,107 @@ st.subheader("Calendar")
 year = today.year
 month = today.month
 
+month_name = calendar.month_name[month]
+
+# WEEKDAY LABELS
+weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
 cal = calendar.Calendar(firstweekday=0)
-month_days = cal.itermonthdates(year, month)
+month_days = list(cal.itermonthdates(year, month))
 
-html = "<div class='calendar'>"
+html = f"""
+<style>
+.calendar-wrapper {{
+    margin-top: 10px;
+}}
 
+.calendar-title {{
+    text-align: center;
+    font-size: 18px;
+    color: #c77995;
+    margin-bottom: 12px;
+    font-weight: 600;
+}}
+
+.calendar-grid {{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}}
+
+.weekday {{
+    text-align: center;
+    font-size: 11px;
+    color: #c98aa1;
+    margin-bottom: 4px;
+    font-weight: 600;
+}}
+
+.day {{
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffe8f0;
+    color: #b76b86;
+    font-size: 13px;
+    transition: 0.2s;
+    border: 1px solid transparent;
+}}
+
+.day:hover {{
+    transform: scale(1.05);
+}}
+
+.done {{
+    background: linear-gradient(135deg, #f7a8c4, #f3bfd1);
+    color: white;
+    box-shadow: 0 4px 12px rgba(247,168,196,0.35);
+}}
+
+.today {{
+    border: 2px solid #d48ca3;
+    font-weight: bold;
+}}
+
+.empty {{
+    visibility: hidden;
+}}
+</style>
+
+<div class="calendar-wrapper">
+<div class="calendar-title">{month_name} {year}</div>
+
+<div class="calendar-grid">
+"""
+
+# WEEKDAY ROW
+for w in weekdays:
+    html += f"<div class='weekday'>{w}</div>"
+
+# DAYS
 for d in month_days:
+
     if d.month != month:
-        html += "<div></div>"
+        html += "<div class='day empty'></div>"
         continue
 
     d_str = str(d)
     day_data = [x for x in data if x["day"] == d_str]
 
-    if day_data and all(x["done"] for x in day_data):
-        html += f"<div class='day done'>{d.day}</div>"
-    else:
-        html += f"<div class='day'>{d.day}</div>"
+    classes = "day"
 
-html += "</div>"
+    # completed day
+    if day_data and all(x["done"] for x in day_data):
+        classes += " done"
+
+    # today highlight
+    if d == today:
+        classes += " today"
+
+    html += f"<div class='{classes}'>{d.day}</div>"
+
+html += "</div></div>"
 
 st.markdown(html, unsafe_allow_html=True)
-
-st.markdown("</div>", unsafe_allow_html=True)
