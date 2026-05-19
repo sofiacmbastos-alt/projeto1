@@ -126,7 +126,7 @@ st.markdown(
         color: #b76b86;
     }
 
-.done {
+    .done {
     background: linear-gradient(135deg, #f8b6cc, #f3c4ff);
     color: white;
     box-shadow: 0 6px 16px rgba(248,182,204,0.45);
