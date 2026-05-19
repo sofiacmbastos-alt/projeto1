@@ -15,29 +15,34 @@ st.set_page_config(page_title="Habit", layout="centered")
 st.markdown("""
 <style>
 
-/* REMOVE TOP SPACE */
+/* TOP DECORATION */
+[data-testid="stDecoration"] {
+    display: none !important;
+}
+
+/* TOOLBAR */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* HEADER */
+[data-testid="stHeader"] {
+    background: transparent;
+    height: 0px;
+}
+
+/* MAIN CONTAINER */
 .block-container {
     padding-top: 0rem !important;
-    margin-top: 0rem !important;
 }
 
-/* REMOVE STREAMLIT HEADER */
-[data-testid="stHeader"] {
-    display: none;
-}
-
-header {
-    display: none;
-}
-
-/* REMOVE EXTRA GAP */
+/* APP POSITION */
 .stApp {
-    margin-top: -60px;
+    margin-top: -90px;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
 # ---------------- STYLE FIX ----------------
 st.markdown(
     """
