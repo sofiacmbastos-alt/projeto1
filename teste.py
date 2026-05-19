@@ -130,7 +130,7 @@ st.markdown(
     background: linear-gradient(135deg, #f8b6cc, #f3c4ff);
     color: white;
     box-shadow: 0 6px 16px rgba(248,182,204,0.45);
-}
+    }
     /* PROGRESS PINK */
     .stProgress > div > div > div > div {
         background-color: #f7a8c4 !important;
